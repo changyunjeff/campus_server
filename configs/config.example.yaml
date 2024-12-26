@@ -1,0 +1,73 @@
+system:
+  serverID: "server-1"  # 服务器唯一标识
+  port: 8080
+  mode: debug     # debug/release
+  useRedis: true # 使用redis
+  useKafka: true # 使用kafka
+
+logrus:
+  level: info
+  format: console
+  prefix: "[server]"
+  directory: log  # 日志目录地址
+  showLine: true
+  encodeLevel: LowercaseColorLevelEncoder
+  showStacktrace: true  # 打印错误日志时，同时打印错误堆栈
+  logInConsole: true
+  retentionDay: 1
+
+mysql:
+  engine: "InnoDB"
+  path: "your_db_url"
+  port: "3306"
+  config: "charset=utf8mb4&parseTime=True&loc=Local"
+  dbName: "your_db_name"
+  username: "your_username_name"
+  password: "your_password"
+  maxIdleConns: 10
+  maxOpenConns: 100
+  logMode: ""
+  
+jwt:
+  secret: "your_secret"
+  expire: 24d    # token过期时间 
+  buffer: 7d     # 缓存时间
+  issuer: name # 发行者名称
+
+wechat:
+  appid: your_appid
+  appSecret: your_app_secret
+
+aliyunOss:
+  endpoint: "oss-cn-hangzhou.aliyuncs.com"
+  accessKeyId: "your_key_id"
+  accessKeySecret: "your_key_secret"
+  bucketName: "your_bucket_name"
+  bucketUrl: "your_bucket_url"
+  basePath: "your_base_path"
+
+redis:
+  # 如果使用集群模式，则 addr 和 db 自动失效
+  addr: localhost:6379
+  db: 0
+  password: "your_password"
+  poolSize: 100
+  duration: "3d"    # 默认数据缓存时间 3天
+  useCluster: false # 是否使用集群模式
+  clusterAddrs:     # Redis集群节点地址
+    - 192.168.0.13:6379
+    - 192.168.2.102:6379
+    - 192.168.2.112:6379
+
+websocket:
+  heartbeatTime: 30
+  readBufferSize: 1024
+  writeBufferSize: 1024
+  expire: 12h
+
+kafka:
+  brokers:
+    - "localhost:9092"
+  consumerGroup: "campus_group"
+  topic: "offline_messages"
+  messageExpiration: "24h"  # 消息过期时间

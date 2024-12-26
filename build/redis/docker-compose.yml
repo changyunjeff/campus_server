@@ -1,0 +1,47 @@
+name: 'redis-server'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+      - ./conf/redis.conf:/etc/redis/redis.conf:ro
+      - ./logs/redis:/var/log/redis
+    command: >
+      redis-server /etc/redis/redis.conf
+      --appendonly yes
+      --requirepass _Redis6379
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    sysctls:
+      - net.core.somaxconn=1024
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "_Redis6379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - redis-net
+
+networks:
+  redis-net:
+    driver: bridge
